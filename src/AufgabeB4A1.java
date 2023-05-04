@@ -10,6 +10,7 @@ public class AufgabeB4A1 {
      * Nachdem Sie die eingelesenen Werte in ein Array überführt haben, soll mittels der
      * Methode heapSelect oder heapSelectFast der k-kleinste Wert gefunden und in der
      * main-Methode via Standard-Out als erste Ausgabezeile ausgegeben werden
+     * @Runtime O(n) - n ist die Anzahl an Zeilen in der Eingabe
      * @param args
      */
     public static void main(String[] args) {
@@ -31,6 +32,7 @@ public class AufgabeB4A1 {
 
     /**
      * Formatiert die Standard-In Eingabe in ein Array von ganzen Zahlen
+     * @Runtime O(n) - n ist die Anzahl an Zeilen in Eingabe
      * @return Array, das die Eingabe enthält
      * @throws NumberFormatException wenn eine Eingabe nicht als Zahl interpretiert werden kann
      */
@@ -55,28 +57,49 @@ public class AufgabeB4A1 {
 
     /**
      * public static int heapSelect(int[] arr, int k) soll ein Array arr aus n Ganzzahlen und eine Ganzzahl k entgegennehmen und mittels eines Maxheap das k-kleinste
-     * Element in O(n log(n)) berechnen und zurückgeben. Das eingegebene Array darf dabei
-     * nicht verändert werden.
+     * Element in O(n log(n)) berechnen und zurückgeben. Das eingegebene Array darf dabei nicht verändert werden.
+     * @Runtime O(n log n) - n ist die Größe des übergebenen Arrays
      * @param arr
      * @param k
      * @return
      */
     public static int heapSelect(int[] arr, int k) {
-        //TODO: AufgabeB4A1.heapSelect(int[] arr, int k)
-        return -1;
+        //TODO: AufgabeB4A1.heapSelect(int[] arr, int k) --Drafted--
+        MaxHeap heap = new MaxHeap(arr.clone());
+        for(int i = heap.getSize(); i > k; i--){
+            heap.extractMax();
+        }
+        return heap.extractMax();
     }
 
     /**
-     * public static int heapSelectFast(int[] arr, int k) soll ein Array arr aus n
-     * Ganzzahlen und eine Ganzzahl k entgegennehmen und mittels eines Maxheap das kkleinste Element in O(n log(k)) berechnen und zurückgeben. Das eingegebene Array
-     * darf dabei nicht verändert werden.
+     * public static int heapSelectFast(int[] arr, int k) soll ein Array arr aus n Ganzzahlen und eine Ganzzahl k entgegennehmen und mittels eines Maxheap das k-kleinste Element in O(n log(k)) berechnen und zurückgeben.
+     * Das eingegebene Array darf dabei nicht verändert werden.
      * Hinweis: Woher kommt der Logarithmus in der Laufzeit und welche Größe müssten Sie entsprechend auf k anpassen um diese kleinere Laufzeitschranke einzuhalten?
+     * @Runtime O(n log k) - n ist die Größe des übergebenen Arrays
      * @param arr
      * @param k
      * @return
      */
     public static int heapSelectFast(int[] arr, int k) {
-        //TODO: AufgabeB4A1.heapSelectFast(int[] arr, int k)
-        return -1;
+        //TODO: AufgabeB4A1.heapSelectFast(int[] arr, int k) --Drafted--
+        MaxHeap heap = new MaxHeap(k);
+        //Fülle MaxHeap komplett auf (k Elemente)
+        for(int i = 0; i < k; i++){
+            int value = arr[i];
+            heap.add(value);
+        }
+        //Wir haben nun k Werte <= als max(MaxHeap)
+        for(int i = k; i < arr.length; i++){
+            int currentMax = heap.peekMax();
+            int value = arr[i];
+            if(value < currentMax){
+                //Fall: neuer Wert ist kleiner als größter Wert des Heaps => Entfernen das größte Element, reihen neues kleinere Element ein
+                heap.extractMax();
+                heap.add(value);
+            }
+            //Alle Werte größer oder gleich den bisherigen Elementen können ignoriert werden
+        }
+        return heap.extractMax();
     }
 }
