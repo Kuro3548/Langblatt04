@@ -8,13 +8,10 @@ import java.util.Scanner;
 public class AufgabeB4A2 {
 
     /**
-     * public static void main(String[] args) soll wie in Aufgabe 1 eine Ganzzahl k als
-     * erstes Argument und eine Folge von n Ganzzahlen aus Standard-In entgegennehmen. Anschließend soll jede der vier Select-Methoden (heapSelect, heapSelectFast,
-     * quickSelectFirst, quickSelectRandom) jeweils 20-mal ausgeführt und jeweils die mittlere Laufzeit in Millisekunden ausgegeben werden. Messen Sie dabei ausschließlich die
-     * Laufzeit der Select-Methoden. Probieren Sie unterschiedliche Eingaben (sortiert, gemischt, verschiedene Größen) aus und notieren Sie Ihre Beobachtungen, sodass Sie diese
-     * dem Tutor im Praktikum präsentieren können
-     * @Runtime O(n) + O(20 * 4)(O(n log n) + O(n log k) + O(quickSelectFirst) + O(quickSelectRandom)) =
-     * @param args
+     * Erhält eine Ganzzahl k erhalten und anschließend aus Standard-In eine Reihe von n Ganzzahlen.
+     * Anschließend wird jede der vier Select-Methoden mehrfach ausgeführt und deren mittlere Laufzeit in Millisekunden ausgegeben werden. Messen Sie dabei ausschließlich die
+     * @Runtime O(20 * 4)(O(n log n) + O(n log k)) = O(n log n) + O(n log k) <= O(n log n), n ist die Anzahl an Zeilen in der Eingabe, k ist das Argument der Kommandozeile
+     * @param args Argumente der Kommandozeile
      */
     public static void main(String[] args) {
         //TODO: AufgabeB4A2.main(String[] args) --Drafted--
@@ -56,9 +53,9 @@ public class AufgabeB4A2 {
     }
 
     /**
-     * Evaluates a 2D-array of runtime and prints the result
+     * Mittelt Zeitmessungen von verschiedenen Algorithmen und gibt das Ergebnis aus.
      * @Runtime O(n * k) - n ist die Anzahl an Arrays, k ist die Größe jedes Arrays
-     * @param times
+     * @param times Ein Array mit Zeitmessungen von verschiedenen Algorithmen
      */
     public static void evaluateTime(int[][] times){
         int[] avg = new int[times.length];
@@ -74,7 +71,7 @@ public class AufgabeB4A2 {
 
     /**
      * Formatiert die Standard-In Eingabe in ein Array von ganzen Zahlen
-     * @Runtime O(n) - n ist die Anzahl an Zeilen in Eingabe
+     * @Runtime O(n) - n ist die Anzahl an Zeilen in der Eingabe
      * @return Array, das die Eingabe enthält
      * @throws NumberFormatException wenn eine Eingabe nicht als Zahl interpretiert werden kann
      */
@@ -98,23 +95,23 @@ public class AufgabeB4A2 {
     }
 
     /**
-     * public static int partition(int[] arr, int l, int r, int p) entspricht der
-     * partition-Methode von Langblatt 1 (Blatt 2). Allerdings soll diesmal eine zusätzliche
-     * Ganzzahl p übergeben werden, die die Position des zu verwendenden Pivot-Elements
-     * angibt mit l ≤ p ≤ r.
+     * Partitioniert das Array nach einem Pivot-Element, sodass alle Elemente an tieferen Stellen kleiner oder gleich dem Pivot-Element sind und diese an höheren Stellen größer als das Pivot-Element.
      * @Runtime O(n) - n ist Größe des übergebenen Arrays
-     * @param arr
-     * @param l
-     * @param r
-     * @param p
-     * @return
+     * @param arr Das zu partitionierende Array
+     * @param l Die untere Schranke des betrachteten Bereichs: 0 ≤ l ≤ r
+     * @param r Die obere Schranke des betrachteten Bereichs: r ≤ arr.length
+     * @param p Die Stelle des Pivot-Elements: l ≤ p ≤ r
+     * @return Die neue Stelle des Pivot-Elements und die Grenze der Partitionen
      */
     public static int partition(int[] arr, int l, int r, int p) {
         //TODO: AufgabeB4A2.partition(int[] arr, int l, int r, int p) --Drafted--
         if(p < l || r < p){
             throw new IllegalArgumentException("Error: Pivot Element is outside Range");
         }
-        if(l >= r){
+        if(l > r){
+            throw new IllegalArgumentException("Error: Partition of Negative Range");
+        }
+        if(l == r){
             return l;
         }
         int pivot_index = p;
@@ -141,12 +138,11 @@ public class AufgabeB4A2 {
     }
 
     /**
-     * public static int quickSelectFirst(int[] arr, int k) soll nach dem oben beschriebenen Verfahren partition nutzen, um das k-kleinste Element aus arr zurückzugeben,
-     * wobei als Pivot-Element immer der kleinste zulässige Index (p = l) verwendet werden soll. Das eingegebene Array arr darf dabei nicht verändert werden!
+     * Bestimmt das k-kleinste Element aus arr und gibt dieses zurück. Das Pivot-Element ist immer der kleinste zulässige Index (p = l). Das eingegebene Array arr wird dabei nicht verändert.
      * @Runtime O(n log n) - n ist Größe des übergebenen Arrays
-     * @param arr
-     * @param k
-     * @return
+     * @param arr Das Array in dem gesucht wird
+     * @param k Suchvariable
+     * @return Das k-kleinste Element aus dem Array
      */
     public static int quickSelectFirst(int[] arr, int k) {
         //TODO: AufgabeB4A2.quickSelectFirst(int[] arr, int k) --Drafted--
@@ -170,12 +166,11 @@ public class AufgabeB4A2 {
     }
 
     /**
-     * public static int quickSelectRandom(int[] arr, int k) soll nach dem oben beschriebenen Verfahren partition nutzen, um das k-kleinste Element aus arr zurückzugeben, wobei als Pivot-Element immer ein zufälliger zulässiger Index (l ≤ p ≤ r) verwendet
-     * werden soll. Das eingegebene Array arr darf dabei nicht verändert werden!
+     * Bestimmt das k-kleinste Element aus arr und gibt dieses zurück. Das Pivot-Element ist immer ein zufälliger zulässiger Index (l ≤ p ≤ r). Das eingegebene Array arr wird dabei nicht verändert.
      * @Runtime O(n log n)
-     * @param arr
-     * @param k
-     * @return
+     * @param arr Das Array in dem gesucht wird
+     * @param k Suchvariable
+     * @return Das k-kleinste Element aus dem Array
      */
     public static int quickSelectRandom(int[] arr, int k) {
         //TODO: AufgabeB4A2.partition(int[] arr, int k) --Drafted--
