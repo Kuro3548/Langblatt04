@@ -13,7 +13,7 @@ public class AufgabeB4A1 {
      * @param args
      */
     public static void main(String[] args) {
-        //TODO: AufgabeB4A1.main(String[] args) --Done--
+        //TODO: AufgabeB4A1.main(String[] args) --Drafted--
         int[] array_input = readStandardIn();
         int k;
         if(args.length != 1){

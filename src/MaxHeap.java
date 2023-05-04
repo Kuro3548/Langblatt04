@@ -9,6 +9,7 @@ public class MaxHeap {
      * @param capacity
      */
     public MaxHeap(int capacity){
+        //TODO: MaxHeap.MaxHeap(int capacity) --Drafted--
         content = new int[capacity];
         this.size = 0;
     }
@@ -19,6 +20,7 @@ public class MaxHeap {
      * @return
      */
     public int getSize(){
+        //TODO: MaxHeap.getSize() --Drafted--
         return size;
     }
 
@@ -27,6 +29,7 @@ public class MaxHeap {
      * @return
      */
     public int getCapacity() {
+        //TODO: MaxHeap.getCapacity() --Drafted--
         return content.length;
     }
 
@@ -36,6 +39,7 @@ public class MaxHeap {
      * @return
      */
     public int[] getValues() {
+        //TODO: MaxHeap.getValues() --Drafted--
         int[] out = new int[size];
         for(int i = 0; i < out.length; i++){
             out[i] = content[i];
@@ -89,6 +93,7 @@ public class MaxHeap {
      * @throws IllegalStateException
      */
     public int peekMax() throws IllegalStateException {
+        //TODO: MaxHeap.peekMax() --Drafted--
         if(size == 0){
             throw new IllegalStateException("Error: Tried accessing element of empty Heap");
         }
