@@ -10,7 +10,7 @@ public class MaxHeap {
      * @param capacity Maximale Anzahl an Werten, die der MaxHeap speichern kann
      */
     public MaxHeap(int capacity){
-        //TODO: MaxHeap.MaxHeap(int capacity) --Drafted--
+        //TODO: MaxHeap.MaxHeap(int capacity)
         content = new int[capacity + 1]; //We dont use the first index
         this.capacity = capacity;
         this.size = 0;
@@ -51,7 +51,7 @@ public class MaxHeap {
      * @return Derzeitiger interner Wert von Attribut size im MaxHeap
      */
     public int getSize(){
-        //TODO: MaxHeap.getSize() --Drafted--
+        //TODO: MaxHeap.getSize()
         return size;
     }
 
@@ -61,7 +61,7 @@ public class MaxHeap {
      * @return Interner Wert von Attribut capacity im MaxHeap
      */
     public int getCapacity() {
-        //TODO: MaxHeap.getCapacity() --Drafted--
+        //TODO: MaxHeap.getCapacity()
         return capacity;
     }
 
@@ -73,8 +73,8 @@ public class MaxHeap {
     public int[] getValues() {
         //TODO: MaxHeap.getValues() --Drafted--
         int[] out = new int[size];
-        for(int i = 1; i < out.length; i++){
-            out[i] = content[i];
+        for(int i = 0; i < out.length; i++){
+            out[i] = content[i + 1];
         }
         return out;
     }
@@ -86,19 +86,20 @@ public class MaxHeap {
      * @throws IllegalStateException - Falls der MaxHeap bereits voll ist
      */
     public void add(int value) throws IllegalStateException {
-        //TODO: MaxHeap.add(int value) --Drafted--
+        //TODO: MaxHeap.add(int value)
         if(size == capacity){
             throw new IllegalStateException("Error: Tried adding value to full Heap");
         }
         size++;
         content[size] = value;
         int i = size;
-        while(i != 1 && content[i] >= content[i / 2]){
+        while(i > 1 && content[i] >= content[i / 2]){
+            int j = i / 2;
             int temp = content[i];
-            content[i] = content[i / 2];
-            content[i / 2] = temp;
+            content[i] = content[j];
+            content[j] = temp;
             assert testNode(i);
-            i = i >> 1;
+            i = j;
         }
         assert isHeap();
     }
@@ -116,7 +117,9 @@ public class MaxHeap {
         }
         int out = content[1];
         content[1] = content[size];
+        content[size] = out;
         size--; //Object content[former_size] persists, but size is decremented. It will be ignored and overridden
+        maxHeapify(1);
         assert isHeap();
         return out;
     }
@@ -128,7 +131,7 @@ public class MaxHeap {
      * @throws IllegalStateException - Falls der MaxHeap leer ist
      */
     public int peekMax() throws IllegalStateException {
-        //TODO: MaxHeap.peekMax() --Drafted--
+        //TODO: MaxHeap.peekMax()
         if(size == 0){
             throw new IllegalStateException("Error: Tried accessing element of empty Heap");
         }
@@ -141,25 +144,20 @@ public class MaxHeap {
      * @param i Die Wurzel des MaxHeaps, dessen Eigenschaft wiederhergestellt wird
      */
     public void maxHeapify(int i) {
-        //TODO: MaxHeap.maxHeapify(i) --Drafted--
+        //TODO: MaxHeap.maxHeapify(i) --Error--
         int leftChild = 2 * i;
         int rightChild = 2 * i + 1;
         if(leftChild > size){
-            //Case: Leaf
+            //Case: Leaf / No Children
             return;
         }
-        int largerChild;
-        if(leftChild < size && rightChild > size){
-            //Case: Only 1 Child
-            largerChild = leftChild;
-        }else{
-            //Default: 2 Children
-            largerChild = (content[leftChild] > content[rightChild])? leftChild : rightChild;
+        int largerChild = leftChild;
+        if(rightChild <= size && (content[leftChild] < content[rightChild])){
+            largerChild = rightChild;
         }
         int temp = content[largerChild];
         content[largerChild] = content[i];
         content[i] = temp;
-        assert testNode(i);
         maxHeapify(largerChild);
     }
 
@@ -169,8 +167,11 @@ public class MaxHeap {
      * @return Wahr, wenn der Knoten keine größeren Kinder hat
      */
     private boolean testNode(int i){
+        if(i > size){
+            return true;
+        }
         boolean hasNoChildren = 2 * i > size;
-        boolean hasOneChild = 2 * i + 1 > size && !hasNoChildren;
+        boolean hasOneChild = 2 * i == size;
         if(hasNoChildren){
             return true;
         }
@@ -206,5 +207,16 @@ public class MaxHeap {
             }
         }
         return true;
+    }
+
+    public String toString(){
+        String out = "[";
+        int[] values = getValues();
+        for(int i = 0; i < values.length; i++){
+            out += values[i];
+            //Wenn i == 2^x: out += "| " }else if(i != values.length - 1){ out += ", " }
+        }
+        out += "]";
+        return out;
     }
 }
