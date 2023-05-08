@@ -1,7 +1,6 @@
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class AufgabeB4A2 {
@@ -107,19 +106,6 @@ public class AufgabeB4A2 {
     }
 
     /**
-     * Generiert ein zufälliges Array für einen Test mit der übergebenen Länge. Alle Werte haben einen Wert zwischen 0 und 100
-     * @param size Länge des generierten Arrays
-     * @return Ein Array der Länge size mit zufälligen Werten zwischen 0 und 100
-     */
-    private static int[] generateTest(int size){
-        int[] out = new int[size];
-        for(int i = 0; i < out.length; i++){
-            out[i] = rand(0, 100);
-        }
-        return out;
-    }
-
-    /**
      * Partitioniert das Array nach einem Pivot-Element, sodass alle Elemente an tieferen Stellen kleiner oder gleich dem Pivot-Element sind und diese an höheren Stellen größer als das Pivot-Element.
      * @Runtime O(n) - n ist Größe des übergebenen Arrays
      * @param arr Das zu partitionierende Array
@@ -128,12 +114,13 @@ public class AufgabeB4A2 {
      * @param p Die Stelle des Pivot-Elements: l ≤ p ≤ r
      * @return Die neue Stelle des Pivot-Elements und die Grenze der Partitionen (l ≤ p_neu ≤ r)
      */
-    public static int partition(int[] arr, int left, int right, int p) {
+    public static int partition(int[] arr, int left, int right, int p){
         //TODO: AufgabeB4A2.partition(int[] arr, int l, int r, int p)
         swap(arr, p, right);
         int pivot_index = right;
         int bound = left;
         for(int i = left; i < right; i++) {
+            //Verschiebe alle kleineren Elemente nach links
             if(arr[i] < arr[pivot_index]) {
                 swap(arr, bound, i);
                 bound++;
@@ -147,52 +134,58 @@ public class AufgabeB4A2 {
      * Bestimmt das k-kleinste Element aus arr und gibt dieses zurück. Das Pivot-Element ist immer der kleinste zulässige Index (p = l). Das eingegebene Array arr wird dabei nicht verändert.
      * @Runtime O(n log n) - n ist Größe des übergebenen Arrays
      * @param arr Das Array in dem gesucht wird
-     * @param k Suchvariable
+     * @param k Such-Variable
      * @return Das k-kleinste Element aus dem Array
      */
     public static int quickSelectFirst(int[] arr, int k){
-        //TODO: AufgabeB4A2.quickSelectFirst(int[] arr, int k) --Error--
+        //TODO: AufgabeB4A2.quickSelectFirst(int[] arr, int k)
         int[] copy = arr.clone();
         return quickSelectFirst(copy, 0, copy.length - 1, k);
     }
-    private static int quickSelectFirst(int[] array, int left, int right, int k) {
+    private static int quickSelectFirst(int[] array, int left, int right, int k){
         if(left == right){
             return array[left];
         }
-        int pivotIndex = partition(array, left, right, left);
+        int pivotIndex = partition(array, left, right, left); //Pivot ist immer linkestes Element
         if(k - 1 == pivotIndex){
+            //Fall: Genau k Elemente sind unter der Grenze → Gebe Grenze aus
             return array[pivotIndex];
         }else if(k - 1 < pivotIndex){
+            //Fall: Mehr als k Elemente sind unter der Grenze → Suche weiter in der unteren Hälfte
             return quickSelectFirst(array, left, pivotIndex - 1, k);
         }else{
+            //Fall: Weniger als k Elemente sind unter der Grenze → Suche in der oberen Hälfte
             return quickSelectFirst(array, pivotIndex + 1, right, k);
         }
     }
-
     /**
      * Bestimmt das k-kleinste Element aus arr und gibt dieses zurück. Das Pivot-Element ist immer ein zufälliger zulässiger Index (l ≤ p ≤ r). Das eingegebene Array arr wird dabei nicht verändert.
      * @Runtime O(n log n)
      * @param arr Das Array in dem gesucht wird
-     * @param k Suchvariable
+     * @param k Such-Variable
      * @return Das k-kleinste Element aus dem Array
      */
     public static int quickSelectRandom(int[] arr, int k){
         int[] copy = arr.clone();
         return quickSelectRandom(copy, 0, copy.length - 1, k);
     }
-    private static int quickSelectRandom(int[] array, int left, int right, int k) {
+    private static int quickSelectRandom(int[] array, int left, int right, int k){
         if(left == right){
             return array[left];
         }
-        int pivotIndex = partition(array, left, right, rand(left, right));
+        int pivotIndex = partition(array, left, right, rand(left, right)); //Pivot ist zufälliges Element zwischen Links und Rechts
         if(k - 1 == pivotIndex){
+            //Fall: Genau k Elemente sind unter der Grenze → Gebe Grenze aus
             return array[pivotIndex];
         }else if(k - 1 < pivotIndex){
+            //Fall: Mehr als k Elemente sind unter der Grenze → Suche weiter in der unteren Hälfte
             return quickSelectRandom(array, left, pivotIndex - 1, k);
         }else{
+            //Fall: Weniger als k Elemente sind unter der Grenze → Suche in der oberen Hälfte
             return quickSelectRandom(array, pivotIndex + 1, right, k);
         }
     }
+
 
     /**
      * Erzeugt eine pseudo-zufällige Zahl zwischen den beiden Zahlen
@@ -205,7 +198,6 @@ public class AufgabeB4A2 {
         double f = Math.random()/Math.nextDown(1.0);
         return (int)(lowerBound * (1.0 - f) + upperBound * f);
     }
-
     /**
      * Swaps the elements at the two indices
      * @Runtime O(1)
@@ -213,10 +205,22 @@ public class AufgabeB4A2 {
      * @param a Index 1
      * @param b Index 2
      */
-    private static void swap(int[] array, int a, int b) {
+    private static void swap(int[] array, int a, int b){
         int temp = array[a];
         array[a] = array[b];
         array[b] = temp;
+    }
+    /**
+     * Generiert ein zufälliges Array für einen Test mit der übergebenen Länge. Alle Werte haben einen Wert zwischen 0 und 100
+     * @param size Länge des generierten Arrays
+     * @return Ein Array der Länge size mit zufälligen Werten zwischen 0 und 100
+     */
+    private static int[] generateTest(int size){
+        int[] out = new int[size];
+        for(int i = 0; i < out.length; i++){
+            out[i] = rand(0, 100);
+        }
+        return out;
     }
     //Scraps:
 
@@ -241,8 +245,7 @@ public class AufgabeB4A2 {
         return quickSelectFirst(bigger, k - bound - 1);
     }*/
 
-    /*public static int quickSelectRandom(int[] arr, int k) {
-        //TODO: AufgabeB4A2.partition(int[] arr, int k) --Drafted--
+    /*public static int quickSelectRandom(int[] arr, int k)
         if(arr.length == 1){
             return arr[0];
         }

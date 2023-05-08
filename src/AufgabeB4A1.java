@@ -12,7 +12,7 @@ public class AufgabeB4A1 {
      * @Runtime O(n) - n ist die Anzahl an Zeilen in der Eingabe
      * @param args Argumente der Kommandozeile
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
         //TODO: AufgabeB4A1.main(String[] args)
         int[] array_input;
         int k;
@@ -71,10 +71,10 @@ public class AufgabeB4A1 {
      * Berechnet mit einem Maxheap das k-kleinste Element in O(n log(n)) und gibt dieses zurück. Das eingegebene Array wird dabei nicht verändert.
      * @Runtime O(n log n) - n ist die Größe des übergebenen Arrays
      * @param arr Das Array in dem gesucht wird
-     * @param k Suchvariable
-     * @return
+     * @param k Such-Variable
+     * @return Das k-kleinste Element des Arrays
      */
-    public static int heapSelect(int[] arr, int k) {
+    public static int heapSelect(int[] arr, int k){
         //TODO: AufgabeB4A1.heapSelect(int[] arr, int k)
         //Heap hat maximale Größe n
         MaxHeap heap = new MaxHeap(arr.length);
@@ -88,15 +88,14 @@ public class AufgabeB4A1 {
         }
         return heap.extractMax();
     }
-
     /**
      * Berechnet mit einem Maxheap das k-kleinste Element in O(n log(n)) und gibt dieses zurück. Das eingegebene Array wird dabei nicht verändert.
      * @Runtime O(n log k) - n ist die Größe des übergebenen Arrays
      * @param arr Das Array in dem gesucht wird
-     * @param k Suchvariable
-     * @return
+     * @param k Such-Variable
+     * @return Das k-kleinste Element aus dem Array
      */
-    public static int heapSelectFast(int[] arr, int k) {
+    public static int heapSelectFast(int[] arr, int k){
         //TODO: AufgabeB4A1.heapSelectFast(int[] arr, int k)
         MaxHeap heap = new MaxHeap(k);
         //Fülle MaxHeap komplett mit k Elementen
@@ -104,17 +103,18 @@ public class AufgabeB4A1 {
             int value = arr[i];
             heap.add(value);
         }
-        //Wir haben nun k Werte <= als max(MaxHeap)
+        //Wir haben nun k Werte ≤ als max(MaxHeap)
         for(int i = k; i < arr.length; i++){
             int currentMax = heap.peekMax();
             int value = arr[i];
             if(value < currentMax){
-                //Fall: neuer Wert ist kleiner als größter Wert des Heaps => Entfernen das größte Element, reihen neues kleinere Element ein
+                //Fall: neuer Wert ist kleiner als größter Wert des Heaps → Ersetze größtes Element durch neues Element (Ein Element ausreihen, nächstes rein)
                 heap.extractMax();
                 heap.add(value);
             }
             //Alle Werte größer oder gleich den bisherigen Elementen können ignoriert werden
         }
+        //Wir haben die kleinsten k Werte im Heap, wir können das größte Element einfach ausgeben
         return heap.extractMax();
     }
 

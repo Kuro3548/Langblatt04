@@ -1,8 +1,7 @@
 public class MaxHeap {
-
     private final int[] content;
-    private int size; //Aktuelle Anzahl an Elementen
-    private final int capacity; //Anzahl der Elemente, die im Heap gespeichert werden können
+    private int size; //Aktuelle Anzahl an Elementen; zeigt immer auf den nächsten leeren Platz
+    //Zusätzliches Attribut capacity ist konstant content.length und kann daher über das Array erreicht werden
 
     /**
      * Erstellt eine MaxHeap-Instanz und initialisiert alle Werte
@@ -12,7 +11,6 @@ public class MaxHeap {
     public MaxHeap(int capacity){
         //TODO: MaxHeap.MaxHeap(int capacity)
         content = new int[capacity];
-        this.capacity = capacity;
         this.size = 0;
     }
 
@@ -25,24 +23,22 @@ public class MaxHeap {
         //TODO: MaxHeap.getSize()
         return size;
     }
-
     /**
      * Gibt die maximal mögliche Anzahl der im MaxHeap gespeicherten Werte aus
      * @Runtime O(1)
      * @return Interner Wert von Attribut capacity im MaxHeap
      */
-    public int getCapacity() {
+    public int getCapacity(){
         //TODO: MaxHeap.getCapacity()
-        return capacity;
+        return content.length;
     }
-
     /**
      * Gibt die aktuell im MaxHeap enthaltenen Werte in einem Array der Länge getSize() zurück
      * @Runtime O(n) - n ist Größe des Heaps
      * @return Array mit dem Inhalt des Heaps
      */
-    public int[] getValues() {
-        //TODO: MaxHeap.getValues() --Drafted--
+    public int[] getValues(){
+        //TODO: MaxHeap.getValues()
         int[] out = new int[size];
         for(int i = 0; i < out.length; i++){
             out[i] = content[i];
@@ -56,12 +52,14 @@ public class MaxHeap {
      * @param value Der Wert, der in den Heap eingefügt werden soll
      * @throws IllegalStateException - Falls der MaxHeap bereits voll ist
      */
-    public void add(int value) throws IllegalStateException {
+    public void add(int value) throws IllegalStateException{
         //TODO: MaxHeap.add(int value)
-        if(size == capacity){
+        if(size == content.length){
             throw new IllegalStateException("Error: Tried adding value to full Heap");
         }
+        //Füge neues Element am Ende hinzu
         content[size] = value;
+        //Lass das Element nach oben an die korrekte Stelle wandern
         int i = size;
         int j = parent(i);
         while(i != j && content[i] >= content[parent(i)]){
@@ -70,6 +68,7 @@ public class MaxHeap {
             i = j;
             j = parent(i);
         }
+        //"Registriert" das neue Element
         size++;
         assert isHeap();
     }
@@ -80,14 +79,16 @@ public class MaxHeap {
      * @return Der größte Wert im MaxHeap (Wurzel)
      * @throws IllegalStateException - Falls der MaxHeap leer ist
      */
-    public int extractMax() throws IllegalStateException {
-        //TODO: MaxHeap.extractMax() --Drafted--
+    public int extractMax() throws IllegalStateException{
+        //TODO: MaxHeap.extractMax()
         if(size == 0){
             throw new IllegalStateException("Error: Tried removing element from empty Heap");
         }
+        //Tauscht Start und Ende
         size--;
         int out = content[0];
         content[0] = content[size];
+        //content[size] behält seinen Wert, er ist aber nicht mehr im Heap "registriert" (unter size). Daher wird er bei der nächsten Möglichkeit überschrieben.
         maxHeapify(0);
         assert isHeap();
         return out;
@@ -99,7 +100,7 @@ public class MaxHeap {
      * @return Der größte Wert im MaxHeap (Wurzel)
      * @throws IllegalStateException - Falls der MaxHeap leer ist
      */
-    public int peekMax() throws IllegalStateException {
+    public int peekMax() throws IllegalStateException{
         //TODO: MaxHeap.peekMax()
         if(size == 0){
             throw new IllegalStateException("Error: Tried accessing element of empty Heap");
@@ -113,17 +114,25 @@ public class MaxHeap {
      * @param i Die Wurzel des MaxHeaps, dessen Eigenschaft wiederhergestellt wird
      */
     public void maxHeapify(int i){
-        if (isLeaf(i)) return;
-        if(content[i] < content[leftChild(i)] || content[i] < content[rightChild(i)]) {
-            if (content[leftChild(i)] > content[rightChild(i)]) {
-                swap(i, leftChild(i));
-                maxHeapify(leftChild(i));
+        if(isLeaf(i)){
+            return;
+        }
+        int left = leftChild(i);
+        int right = rightChild(i);
+        //Wenn ein Kind-Element größer als die Wurzel ist
+        if(content[i] < content[left] || content[i] < content[right]){
+            if(content[left] > content[right]){
+                //Fall: Linkes Kind ist größer
+                swap(i, left);
+                maxHeapify(left);
             }else{
-                swap(i, rightChild(i));
-                maxHeapify(rightChild(i));
+                //Fall: Rechtes Kind ist größer(oder gleich)
+                swap(i, right);
+                maxHeapify(right);
             }
         }
     }
+
 
     /**
      * Prüft, ob ein Knoten und seine 2 Kinder die MaxHeap-Eigenschaft erfüllen
@@ -132,6 +141,7 @@ public class MaxHeap {
      * @return Wahr, wenn der Knoten keine größeren Kinder hat
      */
     private boolean checkNode(int i){
+        //Ein Element außerhalb des Heaps oder ein Knoten ohne Kinder stören die Heap-Bedingung nicht
         if(i >= size || isLeaf(i)){
             return true;
         }
@@ -141,7 +151,6 @@ public class MaxHeap {
         }
         return (content[leftChild(i)] <= content[i] && content[rightChild(i)] <= content[i]);
     }
-
     /**
      * Prüft, ob der gesamte Heap die MaxHeap-Eigenschaft korrekt erfüllt
      * @Runtime O(n)
@@ -155,23 +164,20 @@ public class MaxHeap {
         }
         return true;
     }
-
     /**
      * Gibt die Position Elternknoten eines Knotens aus
      * @Runtime O(1)
      * @param i Der Unterknoten
      * @return Der Knoten, der den Knoten i als direkten Teilbaum hat
      */
-    private int parent(int i) { return (i - 1) / 2; }
-
+    private int parent(int i){ return (i - 1) / 2; }
     /**
      * Gibt die Position linken Teilbaums eines Knotens aus
      * @Runtime O(1)
      * @param i Der Knoten, von dem der linke Teilbaum gesucht wird
      * @return Die Position des linken Teilbaums des Knotens der Position i
      */
-    private int leftChild(int i) { return (2 * i) + 1; }
-
+    private int leftChild(int i){ return (2 * i) + 1; }
     /**
      * Gibt die Position rechten Teilbaums eines Knotens aus
      * @Runtime O(1)
@@ -181,7 +187,6 @@ public class MaxHeap {
     private int rightChild(int i){
         return (2 * i) + 2;
     }
-
     /**
      * Prüft, ob ein Knoten ein Blatt (Knoten der letzten Ebene, besitzt keine Kinder) ist
      * @Runtime O(1)
@@ -189,12 +194,11 @@ public class MaxHeap {
      * @return Wahrheitswert, ob der Knoten ein Blatt des Heaps ist
      */
     private boolean isLeaf(int i){
-        if(i >= (size / 2) && i <= size){
+        if((size / 2) <= i && i <= size){
             return true;
         }
         return false;
     }
-
     /**
      * Tauscht die Elemente von 2 Positionen
      * @Runtime O(1)
