@@ -6,8 +6,9 @@ import java.util.Scanner;
 
 public class AufgabeB4A2 {
     public static boolean testRun = false;
-    public static int test_size = (int)Math.pow(2, 6);
+    public static int test_size = (int)Math.pow(2, 18);
     public static int test_iterations = 20;
+
     /**
      * Erhält eine Ganzzahl k erhalten und anschließend aus Standard-In eine Reihe von n Ganzzahlen.
      * Anschließend wird jede der vier Select-Methoden mehrfach ausgeführt und deren mittlere Laufzeit in Millisekunden ausgegeben werden. Messen Sie dabei ausschließlich die
@@ -36,7 +37,7 @@ public class AufgabeB4A2 {
             iterations = 20;
         }else{
             array_input = generateTest(test_size);
-            k = rand(0, test_size - 1);
+            k = rand(1, test_size - 1);
             iterations = test_iterations;
         }
         int[][] times = new int[4][iterations];
@@ -155,12 +156,10 @@ public class AufgabeB4A2 {
         return quickSelectFirst(copy, 0, copy.length - 1, k);
     }
     private static int quickSelectFirst(int[] array, int left, int right, int k) {
-        System.out.println("Search First: " + Arrays.toString(array) + ": Input:[" + left + ", "+ right + "]" + k);
         if(left == right){
             return array[left];
         }
         int pivotIndex = partition(array, left, right, left);
-        System.out.println("Partition out: " + Arrays.toString(array));
         if(k - 1 == pivotIndex){
             return array[pivotIndex];
         }else if(k - 1 < pivotIndex){
@@ -182,12 +181,10 @@ public class AufgabeB4A2 {
         return quickSelectRandom(copy, 0, copy.length - 1, k);
     }
     private static int quickSelectRandom(int[] array, int left, int right, int k) {
-        System.out.println("Search Random: " + Arrays.toString(array) + ": Input:[" + left + ", "+ right + "]" + k);
         if(left == right){
             return array[left];
         }
         int pivotIndex = partition(array, left, right, rand(left, right));
-        System.out.println("Partition out: " + Arrays.toString(array));
         if(k - 1 == pivotIndex){
             return array[pivotIndex];
         }else if(k - 1 < pivotIndex){

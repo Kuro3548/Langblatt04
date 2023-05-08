@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class AufgabeB4A1 {
-    public static boolean testRun = true;
+    public static boolean testRun = false;
     public static int test_size = 1 + 2 + 4;
 
     /**
@@ -13,7 +13,7 @@ public class AufgabeB4A1 {
      * @param args Argumente der Kommandozeile
      */
     public static void main(String[] args) {
-        //TODO: AufgabeB4A1.main(String[] args) --Drafted--
+        //TODO: AufgabeB4A1.main(String[] args)
         int[] array_input;
         int k;
         if(!testRun) {
@@ -32,10 +32,11 @@ public class AufgabeB4A1 {
             }
         }else{
             array_input = generateTest(test_size);
-            k = rand(0, test_size - 1);
-            MaxHeap test = new MaxHeap(array_input);
-            System.out.println(Arrays.toString(test.getValues()));
-            return;
+            k = rand(1, test_size - 1);
+            int[] sorted = array_input.clone();
+            Arrays.sort(sorted);
+            System.out.println(Arrays.toString(sorted));
+            System.out.println("Search for " + k + ": " + sorted[k - 1]);
         }
         System.out.println(heapSelect(array_input, k));
         System.out.println(heapSelectFast(array_input, k));
@@ -74,8 +75,14 @@ public class AufgabeB4A1 {
      * @return
      */
     public static int heapSelect(int[] arr, int k) {
-        //TODO: AufgabeB4A1.heapSelect(int[] arr, int k) --Drafted--
-        MaxHeap heap = new MaxHeap(arr.clone());
+        //TODO: AufgabeB4A1.heapSelect(int[] arr, int k)
+        //Heap hat maximale Größe n
+        MaxHeap heap = new MaxHeap(arr.length);
+        //Fülle gesamtes Array in Heap
+        for(int i = 0; i < heap.getCapacity(); i++){
+            heap.add(arr[i]);
+        }
+        //Entferne die größten n-k Elemente
         for(int i = heap.getSize(); i > k; i--){
             heap.extractMax();
         }
@@ -90,9 +97,9 @@ public class AufgabeB4A1 {
      * @return
      */
     public static int heapSelectFast(int[] arr, int k) {
-        //TODO: AufgabeB4A1.heapSelectFast(int[] arr, int k) --Drafted--
+        //TODO: AufgabeB4A1.heapSelectFast(int[] arr, int k)
         MaxHeap heap = new MaxHeap(k);
-        //Fülle MaxHeap komplett auf (k Elemente)
+        //Fülle MaxHeap komplett mit k Elementen
         for(int i = 0; i < k; i++){
             int value = arr[i];
             heap.add(value);
@@ -111,6 +118,7 @@ public class AufgabeB4A1 {
         return heap.extractMax();
     }
 
+
     /**
      * Erzeugt eine pseudo-zufällige Zahl zwischen den beiden Zahlen
      * @Runtime O(?)
@@ -122,7 +130,6 @@ public class AufgabeB4A1 {
         double f = Math.random()/Math.nextDown(1.0);
         return (int)(lowerBound * (1.0 - f) + upperBound * f);
     }
-
     /**
      * Generiert ein zufälliges Array für einen Test mit der übergebenen Länge. Alle Werte haben einen Wert zwischen 0 und 100
      * @Runtime O(n)
